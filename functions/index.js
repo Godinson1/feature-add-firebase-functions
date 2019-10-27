@@ -4,7 +4,7 @@ admin.initializeApp();
 const functions = require('firebase-functions');
 
 
-exports.GenerateUuid = functions.database.instance('feature-godwin-enye').ref('/users/{UserId}')
+exports.generateUuid = functions.database.instance('feature-godwin-enye').ref('/users/{UserId}')
     .onCreate((snapshot, context) => {
         console.log(snapshot.val());
         console.log(context);
