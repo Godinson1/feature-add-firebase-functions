@@ -2,17 +2,26 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-const cors = require('cors')({origin: true});
-cors(req, res, () => {});
+const express = require('express')
+const cors = require('cors')
+const app = express()
+ 
+app.use(cors())
 
+app.post("/", (request, response) => {
+    const entry = request.body;
 
+    return admin.database().ref('/messages').push(entry)
+        .then(() => {
+            return response.status(200).send(entry)
+        }).catch(error => {
+            console.error(error);
+            return response.status(500).send('Oh no! Error: ' + error);
+        });
+});
 
-exports.addmessage = functions.https.onRequest(async (req, res) => {
-    const original = req.body;
-    const snapshot = await admin.database().ref('/messages').push({original: original});
-    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
-    res.redirect(303, snapshot.ref.toString());
-  });
+exports.addmessage = functions.https.onRequest(app);
+
 
 exports.GenerateUuid = functions.database.instance('feature-godwin-enye').ref('/messages/{UserId}')
     .onCreate((snapshot, context) => {
