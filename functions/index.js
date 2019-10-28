@@ -4,7 +4,7 @@ admin.initializeApp();
 
 const express = require('express')
 const cors = require('cors')({origin: true});
-const app = express()
+const app = express();
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
     next();
 });
  
-app.use(cors())
+app.use(cors());
 
 app.post("/", (request, response) => {
     const entry = request.body;
